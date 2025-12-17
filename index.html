@@ -2,123 +2,108 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Live Cricket Overlay</title>
+<title>Cricket Overlay</title>
 
 <style>
 body{
   margin:0;
   background:transparent;
   font-family: Arial, sans-serif;
-  color:white;
 }
-.container{
+
+.overlay{
+  position:relative;
   width:1920px;
+  height:1080px;
 }
-.top{
-  display:flex;
-  justify-content:space-between;
-  background:#0b3d2e;
-  padding:15px;
-  font-size:28px;
+
+.bg{
+  position:absolute;
+  width:100%;
+  height:100%;
 }
-.center{
-  background:#000;
-  padding:10px 30px;
-  border-radius:10px;
-  font-size:36px;
-  font-weight:bold;
+
+/* TEXT POSITIONS */
+.score{position:absolute;top:135px;left:430px;font-size:56px;color:#fff;font-weight:700;}
+.overno{position:absolute;top:135px;left:820px;font-size:40px;color:#fff;}
+.pship{position:absolute;top:430px;left:780px;font-size:36px;color:#fff;}
+
+.b1{position:absolute;bottom:220px;left:260px;font-size:30px;color:#fff;}
+.b2{position:absolute;bottom:220px;left:620px;font-size:30px;color:#fff;}
+.bowler{position:absolute;bottom:220px;right:360px;font-size:30px;color:#fff;}
+
+.toss{position:absolute;bottom:70px;left:520px;font-size:32px;color:#fff;font-weight:700;}
+
+/* IMAGES */
+.batsman1-img{position:absolute;bottom:260px;left:260px;width:180px;border-radius:20px;}
+.batsman2-img{position:absolute;bottom:260px;left:620px;width:180px;border-radius:20px;}
+.bowler-img{position:absolute;bottom:260px;right:360px;width:180px;border-radius:20px;}
+
+/* BALLS */
+.balls{position:absolute;bottom:150px;right:280px;}
+.ball{
+  width:40px;height:40px;border-radius:50%;
+  background:#fff;color:#000;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-weight:bold;margin:0 6px;
 }
-.middle{
-  display:flex;
-  justify-content:space-between;
-  background:#102b5c;
-  padding:10px;
-  font-size:22px;
-}
-.bottom{
-  display:flex;
-  justify-content:space-around;
-  background:#000;
-  padding:15px;
-}
-.card{
-  background:#111;
-  padding:10px 15px;
-  border-radius:10px;
-  width:30%;
-}
-.highlight{color:#00ff6a;}
-.yellow{color:#ffd700;}
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="overlay">
 
-  <div class="top">
-    <div id="team"></div>
-    <div class="center">LIVE</div>
-    <div id="status"></div>
+  <img src="overlay-bg.png" class="bg">
+
+  <div id="score" class="score"></div>
+  <div id="overno" class="overno"></div>
+  <div id="pship" class="pship"></div>
+
+  <div id="b1" class="b1"></div>
+  <div id="b2" class="b2"></div>
+  <div id="bowler" class="bowler"></div>
+
+  <img src="images/batsman1.png" class="batsman1-img">
+  <img src="images/batsman2.png" class="batsman2-img">
+  <img src="images/bowler.png" class="bowler-img">
+
+  <div class="balls">
+    <span id="ball1" class="ball"></span>
+    <span id="ball2" class="ball"></span>
+    <span id="ball3" class="ball"></span>
+    <span id="ball4" class="ball"></span>
+    <span id="ball5" class="ball"></span>
+    <span id="ball6" class="ball"></span>
   </div>
 
-  <div class="middle">
-    <div>Score: <span id="score"></span> (<span id="overs"></span>)</div>
-    <div>CRR: <span id="crr"></span></div>
-    <div>Last 6: <span id="last6"></span></div>
-  </div>
-
-  <div class="middle">
-    <div class="highlight">Partnership: <span id="pship"></span></div>
-  </div>
-
-  <div class="bottom">
-    <div class="card">
-      <b>Batsman</b><br>
-      <span id="b1"></span><br>
-      SR: <span id="b1sr"></span>
-    </div>
-
-    <div class="card">
-      <b>Batsman</b><br>
-      <span id="b2"></span><br>
-      SR: <span id="b2sr"></span>
-    </div>
-
-    <div class="card">
-      <b>Bowler</b><br>
-      <span id="bowler"></span><br>
-      <span class="yellow" id="bowlerfig"></span>
-    </div>
-  </div>
+  <div id="toss" class="toss"></div>
 
 </div>
 
 <script>
-function loadData(){
 fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSKCA6mtBBK1VF80AAR1CmMlVgqpM8WOguS0vbboI8O4a3EQ62DSmD-7bPlp0rOzWbQban2WjEHewvV/pub?output=csv")
 .then(res=>res.text())
 .then(data=>{
-let r=data.split("\n")[1].split(",");
-document.getElementById("team").innerText=r[0];
-document.getElementById("score").innerText=r[1];
-document.getElementById("overs").innerText=r[2];
-document.getElementById("crr").innerText=r[3];
-document.getElementById("last6").innerText=r[4];
-document.getElementById("status").innerText=r[5];
-document.getElementById("b1").innerText=r[6]+" "+r[7];
-document.getElementById("b1sr").innerText=r[8];
-document.getElementById("b2").innerText=r[9]+" "+r[10];
-document.getElementById("b2sr").innerText=r[11];
-document.getElementById("bowler").innerText=r[12];
-document.getElementById("bowlerfig").innerText=r[13];
-document.getElementById("pship").innerText=r[14];
+  let r=data.split("\n")[1].split(",");
+
+  document.getElementById("score").innerText = r[0]+" "+r[1]+"/"+r[2];
+  document.getElementById("overno").innerText = "Over No. "+r[3];
+  document.getElementById("pship").innerText = r[5]+" ("+r[6]+")";
+
+  document.getElementById("b1").innerText = r[7]+" "+r[8]+"("+r[9]+")";
+  document.getElementById("b2").innerText = r[10]+" "+r[11]+"("+r[12]+")";
+  document.getElementById("bowler").innerText = r[13]+" "+r[14]+"-"+r[15]+"-"+r[16];
+
+  document.getElementById("ball1").innerText=r[17];
+  document.getElementById("ball2").innerText=r[18];
+  document.getElementById("ball3").innerText=r[19];
+  document.getElementById("ball4").innerText=r[20];
+  document.getElementById("ball5").innerText=r[21];
+  document.getElementById("ball6").innerText=r[22];
+
+  document.getElementById("toss").innerText=r[23];
 });
-}
-loadData();
-setInterval(loadData,5000);
 </script>
 
 </body>
 </html>
-
-
