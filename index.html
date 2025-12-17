@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Live Cricket Overlay</title>
+
+<style>
+body{
+  margin:0;
+  background:transparent;
+  font-family: Arial, sans-serif;
+  color:white;
+}
+.container{
+  width:1920px;
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  background:#0b3d2e;
+  padding:15px;
+  font-size:28px;
+}
+.center{
+  background:#000;
+  padding:10px 30px;
+  border-radius:10px;
+  font-size:36px;
+  font-weight:bold;
+}
+.middle{
+  display:flex;
+  justify-content:space-between;
+  background:#102b5c;
+  padding:10px;
+  font-size:22px;
+}
+.bottom{
+  display:flex;
+  justify-content:space-around;
+  background:#000;
+  padding:15px;
+}
+.card{
+  background:#111;
+  padding:10px 15px;
+  border-radius:10px;
+  width:30%;
+}
+.highlight{color:#00ff6a;}
+.yellow{color:#ffd700;}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="top">
+    <div id="team"></div>
+    <div class="center">OVER</div>
+    <div id="status"></div>
+  </div>
+
+  <div class="middle">
+    <div>Score: <span id="score"></span> (<span id="overs"></span>)</div>
+    <div>CRR: <span id="crr"></span></div>
+    <div>Last 6: <span id="last6"></span></div>
+  </div>
+
+  <div class="middle">
+    <div class="highlight">Partnership: <span id="pship"></span></div>
+  </div>
+
+  <div class="bottom">
+    <div class="card">
+      <b>Batsman</b><br>
+      <span id="b1"></span><br>
+      SR: <span id="b1sr"></span>
+    </div>
+
+    <div class="card">
+      <b>Batsman</b><br>
+      <span id="b2"></span><br>
+      SR: <span id="b2sr"></span>
+    </div>
+
+    <div class="card">
+      <b>Bowler</b><br>
+      <span id="bowler"></span><br>
+      <span class="yellow" id="bowlerfig"></span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function loadData(){
+fetch("PASTE_YOUR_CSV_URL_HERE")
+.then(res=>res.text())
+.then(data=>{
+let r=data.split("\n")[1].split(",");
+document.getElementById("team").innerText=r[0];
+document.getElementById("score").innerText=r[1];
+document.getElementById("overs").innerText=r[2];
+document.getElementById("crr").innerText=r[3];
+document.getElementById("last6").innerText=r[4];
+document.getElementById("status").innerText=r[5];
+document.getElementById("b1").innerText=r[6]+" "+r[7];
+document.getElementById("b1sr").innerText=r[8];
+document.getElementById("b2").innerText=r[9]+" "+r[10];
+document.getElementById("b2sr").innerText=r[11];
+document.getElementById("bowler").innerText=r[12];
+document.getElementById("bowlerfig").innerText=r[13];
+document.getElementById("pship").innerText=r[14];
+});
+}
+loadData();
+setInterval(loadData,5000);
+</script>
+
+</body>
+</html>
