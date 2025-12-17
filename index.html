@@ -95,7 +95,7 @@ body{
 
 <script>
 function loadData(){
-fetch("PASTE_YOUR_CSV_URL_HERE")
+fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSKCA6mtBBK1VF80AAR1CmMlVgqpM8WOguS0vbboI8O4a3EQ62DSmD-7bPlp0rOzWbQban2WjEHewvV/pub?output=csv")
 .then(res=>res.text())
 .then(data=>{
 let r=data.split("\n")[1].split(",");
@@ -120,3 +120,4 @@ setInterval(loadData,5000);
 
 </body>
 </html>
+
